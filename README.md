@@ -77,3 +77,6 @@ response = openai_proxy.Completion.price(
 response['price']
 ```
 Returns a response object  with a price field. 
+
+Please reach out with any questions or suggestions
+<br /> Ayotomiwa, tomiwa@wharton.upenn.edu
