@@ -1,9 +1,10 @@
 from setuptools import setup, find_packages
 
-VERSION = '0.1.2'
-DESCRIPTION = 'A proxy for the OpenAI API'
+VERSION = '0.1.6'
+DESCRIPTION = 'A price proxy for the OpenAI API'
 LONG_DESCRIPTION = 'This proxy enables better budgeting and cost management for making OpenAI API calls ' \
-                   'including more transparency into pricing.'
+                   'including more transparency into pricing. Github repo here: ' \
+                   'https://github.com/tomiwa123/openai-proxy-python'
 
 # Setting up
 setup(

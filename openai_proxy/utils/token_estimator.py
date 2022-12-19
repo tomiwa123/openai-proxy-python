@@ -1,4 +1,5 @@
 from transformers import GPT2TokenizerFast
+from openai_proxy.utils.constants import price_per_token, engine_max_tokens
 
 
 def token_counter(prompt):
@@ -39,44 +40,6 @@ def price_calculator(args):
     engine = p_args['engine']
     max_tokens = p_args['max_tokens']
     n = p_args['n']
-
-    price_per_token = {
-        'ada': 0.0004 / 1000,
-        'babbage': 0.0005 / 1000,
-        'curie': 0.002 / 1000,
-        'davinci': 0.02 / 1000,
-        'ada-finetuned': 0.0016 / 1000,
-        'babbage-finetuned': 0.0024 / 1000,
-        'curie-finetuned': 0.0120 / 1000,
-        'davinci-finetuned': 0.1200 / 1000,
-        'ada-finetuned-training': 0.0004 / 1000,
-        'babbage-finetuned-training': 0.0006 / 1000,
-        'curie-finetuned-training': 0.0030 / 1000,
-        'davinci-finetuned-training': 0.0300 / 1000,
-        'ada-embedding': 0.0040 / 1000,
-        'babbage-embedding': 0.0050 / 1000,
-        'curie-embedding': 0.0200 / 1000,
-        'davinci-embedding': 0.2000 / 1000,
-    }
-
-    engine_max_tokens = {
-        'ada': 2048,
-        'babbage': 2048,
-        'curie': 2048,
-        'davinci': 4000,
-        'ada-finetuned': 2048,
-        'babbage-finetuned': 2048,
-        'curie-finetuned': 2048,
-        'davinci-finetuned': 4000,
-        'ada-finetuned-training': 2048,
-        'babbage-finetuned-training': 2048,
-        'curie-finetuned-training': 2048,
-        'davinci-finetuned-training': 4000,
-        'ada-embedding': 2048,
-        'babbage-embedding': 2048,
-        'curie-embedding': 2048,
-        'davinci-embedding': 4000,
-    }
 
     token_len = token_counter(prompt)
     price_per_completion = min((token_len + int(max_tokens)), engine_max_tokens[engine]) * price_per_token[engine]
