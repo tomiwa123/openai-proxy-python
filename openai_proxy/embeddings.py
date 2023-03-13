@@ -15,18 +15,9 @@ def authenticate():
     return False
 
 
-class Completion:
+class Embedding:
     @staticmethod
-    def create(prompt,
-               engine="babbage",
-               temperature=0.7,
-               max_tokens=200,
-               top_p=1,
-               frequency_penalty=0,
-               presence_penalty=0,
-               stop='',
-               n=1
-               ):
+    def create(phrases=[]):
         error = authenticate()
         if error:
             return error
@@ -36,17 +27,9 @@ class Completion:
             "courseId": openai_proxy.course_id,
             "accessKey": openai_proxy.access_key,
             "accessToken": openai_proxy.access_token,
-            "prompt": prompt,
-            "max_tokens": max_tokens,
-            "engine": engine,
-            "temperature": temperature,
-            "top_p": top_p,
-            "frequency_penalty": frequency_penalty,
-            "presence_penalty": presence_penalty,
-            "stop": stop,
-            "n": n
+            "phrases": phrases,
         }
-        r = requests.post('http://openai-proxy.herokuapp.com/b/request/openai/completion', json=body)
+        r = requests.post('http://openai-proxy.herokuapp.com/b/request/openai/embedding', json=body)
         response = json.loads(r.text)
         if response['status'] == 'success':
             return response['response']
@@ -54,20 +37,9 @@ class Completion:
             return response
 
     @staticmethod
-    def price(prompt,
-              engine="babbage",
-              max_tokens=200,
-              n=1
-              ):
-
-        body = {
-            "prompt": prompt,
-            "max_tokens": max_tokens,
-            "engine": engine,
-            "n": n
-        }
+    def price(phrases=[]):
 
         return {
             "status": "success",
-            "price": token_estimator.price_calculator_completion(body)
+            "price": token_estimator.price_calculator_embedding(phrases)
         }

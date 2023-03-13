@@ -1,14 +1,7 @@
 price_per_token = {
-    'ada': 0.0004 / 1000,
     'text-ada-001': 0.0004 / 1000,
-    'text-ada-002': 0.0004 / 1000,
-    'babbage': 0.0005 / 1000,
     'text-babbage-001': 0.0005 / 1000,
-    'curie': 0.002 / 1000,
     'text-curie-001': 0.002 / 1000,
-    'davinci': 0.02 / 1000,
-    'text-davinci-001': 0.02 / 1000,
-    'text-davinci-002': 0.02 / 1000,
     'text-davinci-003': 0.02 / 1000,
     'ada-finetuned': 0.0016 / 1000,
     'babbage-finetuned': 0.0024 / 1000,
@@ -18,23 +11,31 @@ price_per_token = {
     'babbage-finetuned-training': 0.0006 / 1000,
     'curie-finetuned-training': 0.0030 / 1000,
     'davinci-finetuned-training': 0.0300 / 1000,
-    'ada-embedding': 0.0040 / 1000,
-    'babbage-embedding': 0.0050 / 1000,
-    'curie-embedding': 0.0200 / 1000,
-    'davinci-embedding': 0.2000 / 1000,
+    'text-embedding-ada-002': 0.0004 / 1000,
+    'gpt-3.5-turbo': 0.002 / 1000,
 }
 
+
+def get_price_per_token(engine):
+    if engine in price_per_token:
+        return price_per_token[engine]
+    else:
+        if 'ada' in engine:
+            return price_per_token['ada-finetuned']
+        elif 'babbage' in engine:
+            return price_per_token['babbage-finetuned']
+        elif 'curie' in engine:
+            return price_per_token['curie-finetuned']
+        elif 'davinci' in engine:
+            return price_per_token['davinci-finetuned']
+        else:
+            return 0.1200 / 1000
+
+
 engine_max_tokens = {
-    'ada': 2048,
     'text-ada-001': 2048,
-    'text-ada-002': 2048,
-    'babbage': 2048,
     'text-babbage-001': 2048,
-    'curie': 2048,
     'text-curie-001': 2048,
-    'davinci': 4000,
-    'text-davinci-001': 4000,
-    'text-davinci-002': 4000,
     'text-davinci-003': 4000,
     'ada-finetuned': 2048,
     'babbage-finetuned': 2048,
@@ -44,13 +45,30 @@ engine_max_tokens = {
     'babbage-finetuned-training': 2048,
     'curie-finetuned-training': 2048,
     'davinci-finetuned-training': 4000,
-    'ada-embedding': 2048,
-    'babbage-embedding': 2048,
-    'curie-embedding': 2048,
-    'davinci-embedding': 4000,
+    'text-embedding-ada-002': 2048,
+    'gpt-3.5-turbo': 4096,
 }
+
+
+def get_engine_max_tokens(engine):
+    if engine in engine_max_tokens:
+        return engine_max_tokens[engine]
+    else:
+        if 'ada' in engine:
+            return engine_max_tokens['ada-finetuned']
+        elif 'babbage' in engine:
+            return engine_max_tokens['babbage-finetuned']
+        elif 'curie' in engine:
+            return engine_max_tokens['curie-finetuned']
+        elif 'davinci' in engine:
+            return engine_max_tokens['davinci-finetuned']
+        else:
+            return 2048
+
 
 __all__ = [
     "price_per_token",
+    "get_price_per_token",
     "engine_max_tokens",
+    "get_engine_max_tokens",
 ]

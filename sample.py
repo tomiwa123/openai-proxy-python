@@ -8,15 +8,15 @@ if __name__ == "__main__":
 
     # Completion means GPT-3 requests as opposed to
     # dall-e requests
-    # price requests
-    response = openai_proxy.Completion.price(
-        engine="text-davinci-003",
-        prompt="What can you say about the Aztec Empire. Thousands of years",
-        max_tokens=200,
-        n=2,
-    )
-
-    print(response['price'])
+    
+    # response = openai_proxy.Completion.price(
+    #     engine="text-davinci-003",
+    #     prompt="What can you say about the Aztec Empire. Thousands of years",
+    #     max_tokens=200,
+    #     n=2,
+    # )
+    #
+    # print(response['price'])
 
     # response = openai_proxy.Completion.create(
     #     engine="davinci",
@@ -55,5 +55,24 @@ if __name__ == "__main__":
     #     # get the standard deviation
     #     return pow(variance, 0.5)
 
+    # response = openai_proxy.Embedding.create(
+    #     phrases=["What can you say about the Aztec Empire. Thousands of years"]
+    # )
+    # print(response)
+    # print(response['price'])
 
+    # response = openai_proxy.ChatCompletion.create(
+    #     messages=[
+    #         {
+    #             "role": "system",
+    #             "content": "You are a polite but sarcastic chat bot"
+    #         },
+    #         {
+    #             "role": "user",
+    #             "content": "What can you say about the Aztec Empire. Thousands of years"
+    #         }]
+    # )
+    # print(response)
+    # print(response['price'])
 
+    print(openai_proxy.engines[:5])

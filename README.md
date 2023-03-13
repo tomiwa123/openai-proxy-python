@@ -1,6 +1,6 @@
 # Openai_proxy
 A proxy for OpenAI requests.
-Primarily for AI students at UPenn to track their spending on GTP-3 requests.
+Primarily for AI students at UPenn to track their spending on GPT-3 requests.
 Available for anyone to get the estimate and actual cost of a request 
 
 A frontend GUI is available [here](https://openai-proxy-client.herokuapp.com/)
@@ -23,7 +23,29 @@ openai_proxy.access_token = "4q-_apNm72sGENVtYtcCXAnC7jEGnIUZfylHbEAEdFQ"
 ```
 
 
-### Send Request to OpenAI
+### Check Completion Price
+This request accepts the following parameters corresponding to the OpenAI API's request parameters:
+See the [OpenAI API docs](https://beta.openai.com/docs/api-reference/completions/create) for more details
+<br /> Note that this request does not require the credentials in the setup.
+- prompt: the prompt to be sent to OpenAI's GPT-3 [_required_]
+- engine: the GPT-3 engine to be used for the request
+- max_tokens: the maximum number of tokens to be generated in the completion
+
+Example:
+```
+response = openai_proxy.Completion.price(
+    engine="davinci",
+    prompt="What can you say about the Aztec Empire. Thousands of years",
+    max_tokens=200,
+    n=2,
+)
+
+response['price']
+```
+Returns a response object  with a price field. 
+Note that the Embedding and ChatCompletion classes also have price functions to estimate without sending a request.
+
+### Send Completion Request to OpenAI
 This request accepts the following parameters corresponding to the OpenAI API's request parameters.
 See the [OpenAI API docs](https://beta.openai.com/docs/api-reference/completions/create) for more details
 <br /> Note that this request requires the credentials in the setup.
@@ -55,28 +77,54 @@ response = openai_proxy.Completion.create(
 response['choices'][0]['text']
 response['price']
 ```
-Returns the Openai response object along with a price field. 
+Returns the Openai response object along with a price field.
 
-### Check Request Price
-This request accepts the following parameters corresponding to the OpenAI API's request parameters:
-See the [OpenAI API docs](https://beta.openai.com/docs/api-reference/completions/create) for more details
-<br /> Note that this request does not require the credentials in the setup.
-- prompt: the prompt to be sent to OpenAI's GPT-3 [_required_]
-- engine: the GPT-3 engine to be used for the request
-- max_tokens: the maximum number of tokens to be generated in the completion
+
+### Send Embedding Request to OpenAI
+This request accepts the following parameters corresponding to the OpenAI API's request parameters.
+See the [OpenAI API docs](https://beta.openai.com/docs/api-reference/embeddings/create) for more details
+<br /> Note that this request requires the credentials in the setup.
+- phrases: the list of phrases to be sent to OpenAI's embedding model [_required_]
+- engine: defaults to text-embedding-ada-002 (the cheapest model)
 
 Example:
 ```
-response = openai_proxy.Completion.price(
-    engine="davinci",
-    prompt="What can you say about the Aztec Empire. Thousands of years",
-    max_tokens=200,
-    n=2,
-)
-
-response['price']
+response = openai_proxy.Embedding.create(
+        phrases=["What can you say about the Aztec Empire. Thousands of years"]
+    )
+    
+print(response)
+print(response['price'])
 ```
-Returns a response object  with a price field. 
+Returns the Openai response object along with a price field. 
+
+
+### Send ChatCompletion Request to OpenAI
+This request accepts the following parameters corresponding to the OpenAI API's request parameters.
+See the [OpenAI API docs](https://platform.openai.com/docs/guides/chat/introduction) for more details
+<br /> Note that this request requires the credentials in the setup.
+- messages: the list of phrases to be sent to OpenAI's embedding model [_required_]
+- engine: defaults to gpt-3.5-turbo (the cheapest model)
+
+Example:
+```
+response = openai_proxy.ChatCompletion.create(
+        messages=[
+            {
+                "role": "system",
+                "content": "You are a polite but sarcastic chat bot"
+            },
+            {
+                "role": "user",
+                "content": "What can you say about the Aztec Empire. Thousands of years"
+            }]
+    )
+    print(response)
+    print(response['price'])
+```
+Returns the Openai response object along with a price field. 
+
+Note that the Embedding and ChatCompletion classes also have price functions to estimate without sending a request.
 
 Please reach out with any questions or suggestions
 <br /> Ayotomiwa, tomiwa@wharton.upenn.edu
