@@ -1,13 +1,11 @@
 import openai_proxy
 
 if __name__ == "__main__":
-    openai_proxy.username = "kairos"
-    openai_proxy.course_id = "8000"
-    openai_proxy.access_key = "O6rbLM3-yYcwS5GaWZEghA"
-    openai_proxy.access_token = "4q-_apNm72sGENVtYtcCXAnC7jEGnIUZfylHbEAEdFQ"
-
-    # Completion means GPT-3 requests as opposed to
-    # dall-e requests
+    # openai_proxy.username = "kairos"
+    # openai_proxy.course_id = "8000"
+    # openai_proxy.access_key = "O6rbLM3-yYcwS5GaWZEghA"
+    # openai_proxy.access_token = "4q-_apNm72sGENVtYtcCXAnC7jEGnIUZfylHbEAEdFQ"
+    # openai_proxy.api_key = "sk-h0pSnheoN1vl4mfrc0RuT3Blbk3J356L2MQdU1c9mZc6pwef"
     
     # response = openai_proxy.Completion.price(
     #     engine="text-davinci-003",
@@ -19,7 +17,7 @@ if __name__ == "__main__":
     # print(response['price'])
 
     # response = openai_proxy.Completion.create(
-    #     engine="davinci",
+    #     engine="text-davinci-003",
     #     prompt="What can you say about the Aztec Empire. Thousands of years",
     #     temperature=0.7,
     #     max_tokens=200,
@@ -31,32 +29,14 @@ if __name__ == "__main__":
     # )
     #
     # print(response['choices'][0]['text'])
-
-    # response = openai_proxy.Price.training(
-    #     filename="lecture-22-dialogue-systems-and-chatbots-summarizer-output.jsonl",
-    #     engine="babbage",
-    # )
-    #
     # print(response['price'])
-    #
-    # response = openai_proxy.Price.training(
-    #     prompt="What can you say about the Aztec Empire. Thousands of years",
-    #     engine="davinci",
-    # )
-    #
-    # print(response['price'])
-    #
-    # # a function that gets the standard deviation from a list of numbers
-    # def get_standard_deviation(numbers):
-    #     # get the mean
-    #     mean = sum(numbers) / len(numbers)
-    #     # get the variance
-    #     variance = sum([pow(x - mean, 2) for x in numbers]) / len(numbers)
-    #     # get the standard deviation
-    #     return pow(variance, 0.5)
 
     # response = openai_proxy.Embedding.create(
-    #     phrases=["What can you say about the Aztec Empire. Thousands of years"]
+    #     phrases=[
+    #         "This is the first phrase",
+    #         "This is the second slightly longer phrase",
+    #         "This is the third phrase",
+    #     ]
     # )
     # print(response)
     # print(response['price'])
@@ -70,9 +50,18 @@ if __name__ == "__main__":
     #         {
     #             "role": "user",
     #             "content": "What can you say about the Aztec Empire. Thousands of years"
-    #         }]
+    #         }],
+    #     model="gpt-3.5-turbo",
     # )
     # print(response)
     # print(response['price'])
 
-    print(openai_proxy.engines[:5])
+    # response = openai_proxy.Image.create(
+    #     prompt="What can you say about the Aztec Empire. Thousands of years",
+    #     n=2,
+    #     size="1024x1024",
+    # )
+    # print(response)
+    # print(response['price'])
+
+    # print(openai_proxy.engines[:5])

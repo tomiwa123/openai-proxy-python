@@ -12,7 +12,13 @@ price_per_token = {
     'curie-finetuned-training': 0.0030 / 1000,
     'davinci-finetuned-training': 0.0300 / 1000,
     'text-embedding-ada-002': 0.0004 / 1000,
-    'gpt-3.5-turbo': 0.002 / 1000,
+    '1024x1024': 0.02,
+    '512x512': 0.018,
+    '256x256': 0.016,
+    'gpt-3.5-turbo-prompt': 0.002 / 1000,
+    'gpt-3.5-turbo-completion': 0.002 / 1000,
+    'gpt-4-prompt': 0.03 / 1000,  # default 8k model
+    'gpt-4-completion': 0.06 / 1000,  # default 8k model
 }
 
 
@@ -47,6 +53,7 @@ engine_max_tokens = {
     'davinci-finetuned-training': 4000,
     'text-embedding-ada-002': 2048,
     'gpt-3.5-turbo': 4096,
+    'gpt-4': 8192,
 }
 
 

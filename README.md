@@ -3,6 +3,10 @@ A proxy for OpenAI requests.
 Primarily for AI students at UPenn to track their spending on GPT-3 requests.
 Available for anyone to get the estimate and actual cost of a request 
 
+Price estimates in this package are based on the [OpenAI API docs](https://beta.openai.com/docs/api-reference/completions/create) and [pricing page](https://beta.openai.com/pricing) 
+They are also designed to estimate the highest possible cost of requests before they are sent. 
+Actual request costs will always, assuming no bugs, be lower than the estimates.
+
 A frontend GUI is available [here](https://openai-proxy-client.herokuapp.com/)
 
 ## Installation

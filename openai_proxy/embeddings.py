@@ -1,26 +1,23 @@
 import json
 import requests
 
+import openai
 import openai_proxy
-from openai_proxy.utils import token_estimator
-
-
-def authenticate():
-    # TODO: Authorize public users
-    if openai_proxy.username == "" or openai_proxy.username is None \
-            or openai_proxy.course_id == "" or openai_proxy.course_id is None \
-            or openai_proxy.access_key == "" or openai_proxy.access_key is None \
-            or openai_proxy.access_token == "" or openai_proxy.access_token is None:
-        return "Please set your username, courseId, accessKey, and accessToken"
-    return False
+from openai_proxy.utils import token_estimator, auth
 
 
 class Embedding:
     @staticmethod
     def create(phrases=[]):
-        error = authenticate()
-        if error:
-            return error
+        authentication = auth.authenticate()
+        if authentication == auth.AuthStatus.ERROR:
+            return "Please set your username, courseId, accessKey, and accessToken or just your OpenAI API key"
+
+        if authentication == auth.AuthStatus.PUBLIC:
+            openai.api_key = openai_proxy.api_key
+            response = openai.Embedding.create(input=phrases, model="text-embedding-ada-002")
+            response["price"] = token_estimator.price_calculator_embedding(phrases)
+            return response
 
         body = {
             "username": openai_proxy.username,

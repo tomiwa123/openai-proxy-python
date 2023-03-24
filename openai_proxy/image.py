@@ -6,17 +6,11 @@ import openai_proxy
 from openai_proxy.utils import token_estimator, auth
 
 
-class Completion:
+class Image:
     @staticmethod
     def create(prompt,
-               engine="babbage",
-               temperature=0.7,
-               max_tokens=200,
-               top_p=1,
-               frequency_penalty=0,
-               presence_penalty=0,
-               stop='',
-               n=1
+               n=1,
+               size="1024x1024"
                ):
         authentication = auth.authenticate()
         if authentication == auth.AuthStatus.ERROR:
@@ -24,27 +18,21 @@ class Completion:
 
         params = {
             "prompt": prompt,
-            "max_tokens": max_tokens,
-            "engine": engine,
-            "temperature": temperature,
-            "top_p": top_p,
-            "frequency_penalty": frequency_penalty,
-            "presence_penalty": presence_penalty,
-            "stop": stop,
-            "n": n
+            "n": n,
+            "size": size
         }
 
         if authentication == auth.AuthStatus.PUBLIC:
             openai.api_key = openai_proxy.api_key
-            response = openai.Completion.create(**params)
-            response["price"] = token_estimator.price_calculator_completion(params)
+            response = openai.Image.create(**params)
+            response["price"] = token_estimator.price_calculator_image(params)
             return response
 
         params["username"] = openai_proxy.username
         params["courseId"] = openai_proxy.course_id
         params["accessKey"] = openai_proxy.access_key
         params["accessToken"] = openai_proxy.access_token
-        r = requests.post('http://openai-proxy.herokuapp.com/b/request/openai/completion', json=params)
+        r = requests.post('http://openai-proxy.herokuapp.com/b/request/openai/image', json=params)
         response = json.loads(r.text)
         if response['status'] == 'success':
             return response['response']
@@ -53,19 +41,17 @@ class Completion:
 
     @staticmethod
     def price(prompt,
-              engine="babbage",
-              max_tokens=200,
-              n=1
+              n=1,
+              size="1024x1024"
               ):
 
         body = {
             "prompt": prompt,
-            "max_tokens": max_tokens,
-            "engine": engine,
-            "n": n
+            "n": n,
+            "size": size
         }
 
         return {
             "status": "success",
-            "price": token_estimator.price_calculator_completion(body)
+            "price": token_estimator.price_calculator_image(body)
         }

@@ -1,5 +1,5 @@
 from transformers import GPT2TokenizerFast
-from openai_proxy.utils.constants import price_per_token, engine_max_tokens, get_price_per_token, get_engine_max_tokens
+from openai_proxy.utils.constants import get_price_per_token, get_engine_max_tokens
 
 
 def token_counter(prompt):
@@ -19,6 +19,12 @@ def parse_args(args):
     max_tokens = args['max_tokens'] if 'max_tokens' in args else 500
     n = args['n'] if 'n' in args else 1
     total_tokens = args['total_tokens'] if 'total_tokens' in args else None
+    # completion parameters below
+    # temperature = args['temperature'] if 'temperature' in args else 0.7
+    # top_p = args['top_p'] if 'top_p' in args else 1
+    # frequency_penalty = args['frequency_penalty'] if 'frequency_penalty' in args else 0
+    # presence_penalty = args['presence_penalty'] if 'presence_penalty' in args else 0
+    # stop = args['stop'] if 'stop' in args else ''
 
     return {
         "prompt": prompt,
@@ -26,6 +32,12 @@ def parse_args(args):
         "max_tokens": max_tokens,
         "n": n,
         "total_tokens": total_tokens,
+        # completion parameters below
+        # "temperature": temperature,
+        # "top_p": top_p,
+        # "frequency_penalty": frequency_penalty,
+        # "presence_penalty": presence_penalty,
+        # "stop": stop,
     }
 
 
@@ -71,16 +83,30 @@ def price_calculator_completion(args):
     return round(price, 10)
 
 
-def price_calculator_chat(messages):
-    cost = 0
-    if 'total_tokens' in messages:
-        cost = messages['total_tokens'] * get_price_per_token('gpt-3.5-turbo')
-        return round(cost, 10)
+def price_calculator_chat(messages, model='gpt-3.5-turbo', has_completion=False):
+    prompt_cost = 0
+    completion_cost = 0
 
+    # Post-request
+    if has_completion:
+        prompt_tokens = 0
+        for message in messages[:-1]:
+            token_len = token_counter(message["content"])
+            prompt_tokens += token_len
+            prompt_cost += token_len * get_price_per_token(model + "-prompt")
+        completion_cost += (token_counter(messages[-1]["content"])) * \
+                           get_price_per_token(model + "-completion")
+        return round(prompt_cost + completion_cost, 10)
+
+    # Pre-request estimation with max_tokens
+    prompt_tokens = 0
     for message in messages:
         token_len = token_counter(message["content"])
-        cost += token_len * get_price_per_token('gpt-3.5-turbo')
-    return round(cost, 10)
+        prompt_tokens += token_len
+        prompt_cost += token_len * get_price_per_token(model + "-prompt")
+    completion_cost += (get_engine_max_tokens(model) - prompt_tokens) * \
+                       get_price_per_token(model + "-completion")
+    return round(prompt_cost + completion_cost, 10)
 
 
 def price_calculator_embedding(phrases):
@@ -89,3 +115,9 @@ def price_calculator_embedding(phrases):
         token_len = token_counter(phrase)
         cost += token_len * get_price_per_token('text-embedding-ada-002')
     return round(cost, 10)
+
+
+def price_calculator_image(args):
+    n = args['n'] if 'n' in args else 1
+    size = args['size'] if 'size' in args else "1024x1024"
+    return round(n * get_price_per_token(size), 10)
