@@ -19,8 +19,7 @@ class ChatCompletion:
                 model=model,
                 messages=messages
             )
-            messages.append(response["choices"][0]["message"])
-            response["price"] = token_estimator.price_calculator_chat(messages, model=model, has_completion=True)
+            response["price"] = token_estimator.price_calculator_chat_completion(response["usage"], model=model)
             return response
 
         body = {

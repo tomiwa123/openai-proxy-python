@@ -84,25 +84,9 @@ def price_calculator_completion(args):
     return round(price, 10)
 
 
-def price_calculator_chat(messages, model='gpt-3.5-turbo', has_completion=False):
+def price_calculator_chat(messages, model='gpt-3.5-turbo'):
     prompt_cost = 0
     completion_cost = 0
-
-    # Post-request
-    if has_completion:
-        prompt_tokens = 0
-        for message in messages[:-1]:
-            token_len = token_counter(message["content"], model) + \
-                        token_counter(message["role"], model) + \
-                        get_message_padding(model)
-            prompt_tokens += token_len
-            prompt_cost += token_len * get_price_per_token(model + "-prompt")
-        completion_tokens = token_counter(messages[-1]["content"], model) + \
-                            token_counter(messages[-1]["role"], model) + \
-                            get_message_padding(model)
-        completion_cost += completion_tokens * \
-                           get_price_per_token(model + "-completion")
-        return round(prompt_cost + completion_cost, 10)
 
     # Pre-request estimation with max_tokens
     prompt_tokens = 0
@@ -115,6 +99,12 @@ def price_calculator_chat(messages, model='gpt-3.5-turbo', has_completion=False)
     completion_cost += (get_engine_max_tokens(model) - prompt_tokens) * \
                        get_price_per_token(model + "-completion")
     return round(prompt_cost + completion_cost, 10)
+
+
+def price_calculator_chat_completion(usage, model='gpt-3.5-turbo'):
+    return round(usage["prompt_tokens"] * get_price_per_token(model + "-prompt") +
+                 usage["completion_tokens"] * get_price_per_token(model + "-completion")
+                 , 10)
 
 
 def price_calculator_embedding(phrases):
