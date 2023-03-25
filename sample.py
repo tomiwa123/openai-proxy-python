@@ -27,7 +27,7 @@ if __name__ == "__main__":
     #     stop=["###", '\n'],
     #     n=2
     # )
-    #
+    # 
     # print(response['choices'][0]['text'])
     # print(response['price'])
 
@@ -41,22 +41,22 @@ if __name__ == "__main__":
     # print(response)
     # print(response['price'])
 
-    # response = openai_proxy.ChatCompletion.create(
-    #     messages=[
-    #         {
-    #             "role": "system",
-    #             "content": "You are a polite but sarcastic chat bot"
-    #         },
-    #         {
-    #             "role": "user",
-    #             "content": "What can you say about the Aztec Empire. Thousands of years"
-    #         }],
-    #     model="gpt-3.5-turbo",
-    # )
-    # print(response)
-    # print(response['price'])
+    response = openai_proxy.ChatCompletion.price(
+        messages=[
+            {
+                "role": "system",
+                "content": "You are a polite but sarcastic chat bot"
+            },
+            {
+                "role": "user",
+                "content": "What can you say about the Aztec Empire. Thousands of years"
+            }],
+        model="gpt-3.5-turbo",
+    )
+    print(response)
+    print(response['price'])
 
-    # response = openai_proxy.Image.create(
+    # response = openai_proxy.Image.price(
     #     prompt="What can you say about the Aztec Empire. Thousands of years",
     #     n=2,
     #     size="1024x1024",
