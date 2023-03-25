@@ -4,3 +4,4 @@ build/
 dist/
 openai_proxy.egg-info
 *.pyc
+sample.py
