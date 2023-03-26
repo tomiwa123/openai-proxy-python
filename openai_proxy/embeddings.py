@@ -17,6 +17,7 @@ class Embedding:
             openai.api_key = openai_proxy.api_key
             response = openai.Embedding.create(input=phrases, model="text-embedding-ada-002")
             response["price"] = token_estimator.price_calculator_embedding(phrases)
+            openai_proxy.session_price += response["price"]
             return response
 
         body = {
@@ -29,6 +30,7 @@ class Embedding:
         r = requests.post('http://openai-proxy.herokuapp.com/b/request/openai/embedding', json=body)
         response = json.loads(r.text)
         if response['status'] == 'success':
+            openai_proxy.session_price += response['response']["price"]
             return response['response']
         else:
             return response

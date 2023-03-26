@@ -20,6 +20,7 @@ class ChatCompletion:
                 messages=messages
             )
             response["price"] = token_estimator.price_calculator_chat_completion(response["usage"], model=model)
+            openai_proxy.session_price += response["price"]
             return response
 
         body = {
@@ -33,6 +34,7 @@ class ChatCompletion:
         r = requests.post('http://openai-proxy.herokuapp.com/b/request/openai/chat', json=body)
         response = json.loads(r.text)
         if response['status'] == 'success':
+            openai_proxy.session_price += response['response']["price"]
             return response['response']
         else:
             return response

@@ -26,6 +26,7 @@ class Image:
             openai.api_key = openai_proxy.api_key
             response = openai.Image.create(**params)
             response["price"] = token_estimator.price_calculator_image(params)
+            openai_proxy.session_price += response["price"]
             return response
 
         params["username"] = openai_proxy.username
@@ -35,6 +36,7 @@ class Image:
         r = requests.post('http://openai-proxy.herokuapp.com/b/request/openai/image', json=params)
         response = json.loads(r.text)
         if response['status'] == 'success':
+            openai_proxy.session_price += response['response']["price"]
             return response['response']
         else:
             return response

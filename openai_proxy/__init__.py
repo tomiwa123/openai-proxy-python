@@ -15,6 +15,8 @@ access_token = os.environ.get("OPENAI_PROXY_ACCESS_TOKEN")
 username = os.environ.get("OPENAI_PROXY_USERNAME")
 course_id = os.environ.get("OPENAI_PROXY_COURSE_ID")
 
+session_price = 0
+
 # r = requests.get('http://openai-proxy.herokuapp.com/b/request/engines')
 # response = json.loads(r.text)
 #
@@ -30,5 +32,6 @@ __all__ = [
     "Completion",
     "Embedding",
     "ChatCompletion",
-    "Image"
+    "Image",
+    "session_price"
 ]
