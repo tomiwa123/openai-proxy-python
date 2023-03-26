@@ -84,7 +84,7 @@ def price_calculator_completion(args):
     return round(price, 10)
 
 
-def price_calculator_chat(messages, model='gpt-3.5-turbo'):
+def price_calculator_chat(messages, model='gpt-3.5-turbo', n=1):
     prompt_cost = 0
     completion_cost = 0
 
@@ -98,7 +98,7 @@ def price_calculator_chat(messages, model='gpt-3.5-turbo'):
         prompt_cost += token_len * get_price_per_token(model + "-prompt")
     completion_cost += (get_engine_max_tokens(model) - prompt_tokens) * \
                        get_price_per_token(model + "-completion")
-    return round(prompt_cost + completion_cost, 10)
+    return round(prompt_cost + (n * completion_cost), 10)
 
 
 def price_calculator_chat_completion(usage, model='gpt-3.5-turbo'):

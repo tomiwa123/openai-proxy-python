@@ -8,7 +8,7 @@ from openai_proxy.utils import token_estimator, auth
 
 class ChatCompletion:
     @staticmethod
-    def create(messages=[], model="gpt-3.5-turbo"):
+    def create(messages=[], model="gpt-3.5-turbo", n=1):
         authentication = auth.authenticate()
         if authentication == auth.AuthStatus.ERROR:
             return "Please set your username, courseId, accessKey, and accessToken or just your OpenAI API key"
@@ -17,7 +17,8 @@ class ChatCompletion:
             openai.api_key = openai_proxy.api_key
             response = openai.ChatCompletion.create(
                 model=model,
-                messages=messages
+                messages=messages,
+                n=n
             )
             response["price"] = token_estimator.price_calculator_chat_completion(response["usage"], model=model)
             openai_proxy.session_price += response["price"]
@@ -29,7 +30,8 @@ class ChatCompletion:
             "accessKey": openai_proxy.access_key,
             "accessToken": openai_proxy.access_token,
             "model": model,
-            "messages": messages
+            "messages": messages,
+            "n": n
         }
         r = requests.post('http://openai-proxy.herokuapp.com/b/request/openai/chat', json=body)
         response = json.loads(r.text)
@@ -40,8 +42,8 @@ class ChatCompletion:
             return response
 
     @staticmethod
-    def price(messages=[], model="gpt-3.5-turbo"):
+    def price(messages=[], model="gpt-3.5-turbo", n=1):
         return {
             "status": "success",
-            "price": token_estimator.price_calculator_chat(messages, model)
+            "price": token_estimator.price_calculator_chat(messages, model, n)
         }
