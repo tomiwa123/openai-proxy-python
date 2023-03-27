@@ -37,7 +37,10 @@ class Completion:
         if authentication == auth.AuthStatus.PUBLIC:
             openai.api_key = openai_proxy.api_key
             response = openai.Completion.create(**params)
-            response["price"] = token_estimator.price_calculator_completion(params)
+            response["price"] = token_estimator.price_calculator_completion({
+                "total_tokens": response["usage"]["total_tokens"],
+                "engine": response["model"]
+            })
             openai_proxy.session_price += response["price"]
             return response
 

@@ -116,6 +116,11 @@ def price_calculator_embedding(phrases):
     return round(cost, 10)
 
 
+def price_calculator_embedding_completion(usage):
+    model = 'text-embedding-ada-002'
+    return round(usage["total_tokens"] * get_price_per_token(model), 10)
+
+
 def price_calculator_image(args):
     n = args['n'] if 'n' in args else 1
     size = args['size'] if 'size' in args else "1024x1024"

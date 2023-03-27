@@ -6,6 +6,7 @@ from openai_proxy.completion import Completion
 from openai_proxy.embeddings import Embedding
 from openai_proxy.chat_completion import ChatCompletion
 from openai_proxy.image import Image
+from openai_proxy.price import Price
 
 
 api_key = os.environ.get("OPENAI_API_KEY")
@@ -33,5 +34,6 @@ __all__ = [
     "Embedding",
     "ChatCompletion",
     "Image",
+    "Price",
     "session_price"
 ]
